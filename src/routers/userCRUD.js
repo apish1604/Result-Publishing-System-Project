@@ -4,7 +4,7 @@ const {Student,StudentVerify}=require('../models/studentInfo')
 const Admin=require('../models/admin')
 const auth=require('../middlewares/auth')
 const router=new express.Router()
-const sendEmail=require('../utils/sendEMail')
+const sendEmail=require('../utils/sendEmail')
 
 
 //Register
