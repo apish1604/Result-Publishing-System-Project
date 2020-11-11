@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"node src/index.js"
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": "14.15.0"
   },
   "repository": {
     "type": "git",
@@ -16,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/apish1604/Result-Publishing-System-Project/issues"
   },
-  "homepage": "https://github.com/apish1604/Result-Publishing-System-Project#readme"
+  "homepage": "https://github.com/apish1604/Result-Publishing-System-Project#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
