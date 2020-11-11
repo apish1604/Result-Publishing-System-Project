@@ -1,0 +1,20 @@
+{
+  "name": "windows",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start":"node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apish1604/Result-Publishing-System-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apish1604/Result-Publishing-System-Project/issues"
+  },
+  "homepage": "https://github.com/apish1604/Result-Publishing-System-Project#readme"
+}

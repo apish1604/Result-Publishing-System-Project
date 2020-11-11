@@ -10,8 +10,8 @@ let transporter = nodemailer.createTransport({
     // secure: true,
     //service: 'gmail',
     auth: {
-      user: '',
-      pass: ''
+      user: 'resultpublishingsystem@gmail.com',
+      pass: 'kapinsangwan#'
     }
   });
 
@@ -20,7 +20,7 @@ const sendEmail=async (email)=>{
     let otp = Math.random();
     otp = otp * 1000000;
     otp = parseInt(otp);
-    console.log(otp);
+    //console.log(otp);
      
     // Send mail with defined transport object
     var mailOptions={
