@@ -1,5 +1,6 @@
 ///Users/om/mongodb/bin/mongod.exe --dbpath=/Users/om/mongodb-data  
 const express=require('express')
+const cors= require('cors')
 require('./db/mongoose')
 const app=express()
 
@@ -9,7 +10,7 @@ const userCRUDRouter=require('./routers/userCRUD')
 const marksRouter=require('./routers/marks')
 
 
-
+app.use(cors())
 app.use(express.json())
 app.use(homeRouter)
 app.use(userCRUDRouter)
