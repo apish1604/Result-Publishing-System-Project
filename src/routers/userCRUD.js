@@ -161,7 +161,7 @@ router.put('/verifyadmin',async(req,res)=>{
                 admin.otp={}
                 await admin.save()
                 const token = await admin.generateAuthToken();
-                return res.status(201).send(token)
+                return res.status(201).send({token})
             }
             admin.otp.attemptLeft--;
             await admin.save()

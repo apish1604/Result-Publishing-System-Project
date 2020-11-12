@@ -108,9 +108,9 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
 
 })
 
-router.get('/getresult',auth, async(req,res)=>{
-    const rollno = req.body.rollno
-    const sem = req.body.semester
+router.get('/getresult/:rollno/:semester',async(req,res)=>{
+    const rollno = req.params.rollno
+    const sem = req.params.semester
 
     try{
         const student=await Student.findOne({rollno})
