@@ -1,6 +1,7 @@
 ///Users/om/mongodb/bin/mongod.exe --dbpath=/Users/om/mongodb-data  
 const express=require('express')
 const cors= require('cors')
+
 require('./db/mongoose')
 const app=express()
 
@@ -21,3 +22,10 @@ const port = process.env.PORT || 3000
 app.listen( port,() => {
     console.log('Server is up on port '+ port)
 })
+
+//const Admin=require('./models/admin')
+//const createAdmin=async ()=>{
+//    const admin=await new Admin({email: "gunashekherproddatoori@gmail.com", password: "gunaShekhar"})
+//    await admin.save()
+//}
+//createAdmin()

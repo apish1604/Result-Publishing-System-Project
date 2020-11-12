@@ -138,7 +138,7 @@ router.post('/login',async(req,res)=>{
 
 //Admin Verification
 router.put('/verifyadmin',async(req,res)=>{
-    const email = "kapinsangwan@gmail.com"
+    const email = "gunashekherproddatoori@gmail.com"
     const otp=req.body.otp
     const recent=new Date()
 
