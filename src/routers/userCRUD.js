@@ -10,6 +10,7 @@ const sendEmail=require('../utils/sendEmail')
 //Register
 router.post('/register',async(req,res)=>{
     const rollno=req.body.rollno;
+    const password=req.body.password;
     const recent=new Date()
  
     try{
@@ -35,7 +36,8 @@ router.post('/register',async(req,res)=>{
         
         //Send email
         const otp=await sendEmail(email)
-        const newStudent = await new StudentVerify({rollno,otp});
+        console.log(otp)
+        const newStudent = await new StudentVerify({rollno,otp,password});
         await newStudent.save()
     
         //Generate token
@@ -43,7 +45,6 @@ router.post('/register',async(req,res)=>{
         return res.status(201).send({token});
     }catch(e)
     {
-        console.log(e)
         return res.send(e)
     }
    
@@ -61,22 +62,23 @@ router.post('/verify',auth,async(req,res)=>{
         if(!unverifiedStudent)
             return res.status(404).send("Time Limit exceeded. Try registering again")
         
-         
         if((recent.getTime() - unverifiedStudent.createdAt.getTime())/1000 > 15*60)
         {
             unverifiedStudent.remove()
             return res.status(404).send("Time Limit exceeded. Try registering again")
         }
-
         if(unverifiedStudent['attemptLeft']>0)
         {
             if(unverifiedStudent['otp']==otp)
             {
-                unverifiedStudent.remove()
-                const new_student=await new Student({rollno,publicKey})
+                const password = unverifiedStudent.password
+                const new_student=await new Student({rollno,publicKey,password})
                 await new_student.save()
+                unverifiedStudent.remove()
+                //Generate token
+                const token = await new_student.generateAuthToken();
 
-                return res.send("You has been successfully registered")
+                return res.status(201).send({token})
             }
             unverifiedStudent['attemptLeft']--
             await unverifiedStudent.save()
@@ -90,6 +92,26 @@ router.post('/verify',auth,async(req,res)=>{
     {
         return res.send("Error")
     }
+})
+
+//Student login
+router.post('/student/login',async(req,res)=>{
+    const rollno=req.body.rollno
+    const password=req.body.password
+    try{
+        const student=await Student.findByCredentials(rollno,password)
+        if(!student)
+        {
+            return res.status(404).send("StudentNotFound")
+        }
+        const token = await student.generateAuthToken();
+
+        return res.status(200).send({token});
+    }catch(e)
+    {
+        return res.status(404).send(e);
+    }
+
 })
 
 //ADMIN LOGIN
@@ -161,7 +183,7 @@ router.put('/verifyadmin',async(req,res)=>{
                 admin.otp={}
                 await admin.save()
                 const token = await admin.generateAuthToken();
-                return res.status(201).send({token})
+                return res.status(200).send({token})
             }
             admin.otp.attemptLeft--;
             await admin.save()

@@ -7,4 +7,11 @@ mongoose.connect(connection,{
     useUnifiedTopology:true
 })
 
+//mongoose.connect('mongodb://127.0.0.1:27017/ResultPublishing-api',{
+//    useNewUrlParser:true,
+//    useCreateIndex:true,
+//    useFindAndModify:false,
+//    useUnifiedTopology:true
+//})
+
 //ResultPublishing-api

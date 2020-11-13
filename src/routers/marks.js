@@ -6,7 +6,7 @@ const {Student,StudentVerify}=require('../models/studentInfo')
 const csv=require('csvtojson')
 const NodeRSA=require('node-rsa')
 const adminAuth=require('../middlewares/adminAuth')
-
+const studentAuth=require('../middlewares/studentAuth')
 const upload=multer({ 
     dest: 'files', 
     limits:{
@@ -62,7 +62,6 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
    .fromFile(req.file.path)
    .then(async (jsonObj)=>
    {
-           console.log("hi")
         for(let i=0;i<jsonObj.length;i++)
         {
             let rollno=jsonObj[i].Rollno
@@ -108,9 +107,10 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
 
 })
 
-router.get('/getresult/:rollno/:semester',async(req,res)=>{
-    const rollno = req.params.rollno
-    const sem = req.params.semester
+router.get('/result',studentAuth,async(req,res)=>{
+
+    const rollno = req.query.rollno
+    const sem = req.query.semester
 
     try{
         const student=await Student.findOne({rollno})

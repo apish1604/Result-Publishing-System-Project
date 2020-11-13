@@ -25,6 +25,10 @@ const studentVerifySchema=new mongoose.Schema({
 
         }
     },
+    password:{
+          type:String,
+          required:true
+   },
     otp:{
         type:Number,
         required:true
@@ -53,11 +57,16 @@ const studentSchema=new mongoose.Schema({
     type:String,
     required:true
    },
+   password:{
+          type:String,
+          required:true
+   },
     publicKey:{
         type:String,
         required:true,
     },
-    result:[String]
+    result:[String],
+    tokens:[{}]
 })
 
 
@@ -71,6 +80,46 @@ studentVerifySchema.methods.generateAuthToken = async function () {
 
      return token
  }
+
+studentVerifySchema.pre('save',async function(next){
+    const user=this;
+    if(user.isModified('password')){
+        user.password=await bcrypt.hash(user.password,8)
+    }
+    next();
+})
+
+ studentSchema.methods.generateAuthToken = async function () {
+    const user = this
+    //Generate token
+    const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse', {expiresIn: 7*60*60})
+    console.log(token)
+    user.tokens = user.tokens.concat({ token })
+    await user.save()
+
+    return token
+}
+
+studentSchema.statics.findByCredentials=async (rollno,password)=>{
+    const user=await Student.findOne({rollno})
+    
+    if(!user){
+        throw new Error("Unable to login")
+    }
+    const isMatch=await bcrypt.compare(password,user.password)
+    if(!isMatch){
+        throw new Error('Password Mismatch')
+    }
+    return user;
+}
+
+//studentSchema.pre('save',async function(next){
+//    const user=this;
+//    if(user.isModified('password')){
+//        user.password=await bcrypt.hash(user.password,8)
+//    }
+//    next();
+//})
 
 const Student=mongoose.model('Student',studentSchema)
 const StudentVerify=mongoose.model('StudentVerify',studentVerifySchema)
