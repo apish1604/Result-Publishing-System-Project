@@ -18,7 +18,7 @@ const upload=multer({
              return cb(new Error('Please upload a csv file'))
          }
          cb(undefined,true)
-         cb(undefined,false)  
+         
     }
 })
 //result already uploaded or not
@@ -54,23 +54,29 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
     
     
     const private_key = new NodeRSA(privateKey1)
-
+    console.log("hi")
     if(isNaN(sem) || sem>10 || sem<=0)
         return res.send("Enter a valid semester number")
-
+ 
    csv()
    .fromFile(req.file.path)
    .then(async (jsonObj)=>
    {
+   console.log(jsonObj)
+   console.log(jsonObj.length)
         for(let i=0;i<jsonObj.length;i++)
         {
+        console.log("hi")
             let rollno=jsonObj[i].Rollno
+            console.log(rollno)
             let result=JSON.stringify(jsonObj[i])
-            
+            console.log(result)
             let student=await Student.findOne({rollno})
+            console.log(student)
             let public_key = new NodeRSA(student.publicKey)
+            console.log("hi")
             let encrypted_result = public_key.encrypt(result , 'base64');
-
+            console.log(encrypted_result)
             if(student)
             {
                 //incase administration skipped result of any sem in between
@@ -87,12 +93,17 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
                 if(student.result.length >= sem)
                 {
                     student.result.set(sem-1,encrypted_result)
+
                     await student.save()
+                    return res.send("Successfully uploaded the marks")
+
                 }
                 else
                 {
                     student.result.push(encrypted_result)
                     await student.save()
+                    return res.send("Successfully uploaded the marks")
+
                 }
                 
             }
@@ -100,7 +111,6 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
         //let student=await Student.findOne({rollno:"2018BCS-025"})
         //const decryptedString = private_key.decrypt(student.result[0] , 'utf8')
 
-   return res.send("Successfully uploaded the marks")
     }).catch((e)=>{
     return res.send(e)
 })
@@ -113,7 +123,7 @@ router.get('/result',studentAuth,async(req,res)=>{
     const sem = req.query.semester
     try{
         if(isNaN(sem) || sem<=0 || sem>10)
-            throw new Error("Enter a valid semester")
+            throw new Error("Enter a valid semester number")
         const student=await Student.findOne({rollno})
         if(!student)
             return res.status(404).send("Student not registered")

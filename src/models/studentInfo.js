@@ -93,7 +93,6 @@ studentVerifySchema.pre('save',async function(next){
     const user = this
     //Generate token
     const token = jwt.sign({ _id: user._id.toString() }, 'thisismynewcourse', {expiresIn: 7*60*60})
-    console.log(token)
     user.tokens = user.tokens.concat({ token })
     await user.save()
 

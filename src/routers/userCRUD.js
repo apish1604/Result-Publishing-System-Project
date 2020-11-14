@@ -85,10 +85,10 @@ router.post('/verify',auth,async(req,res)=>{
             unverifiedStudent['attemptLeft']--
             await unverifiedStudent.save()
 
-            return res.send("Wrong OTP. Try entering OTP again")
+            return res.status(406).send("Wrong OTP. Try entering OTP again")
         }
         unverifiedStudent.remove()
-        return res.send("No of attempts exceeded. Try registering again")
+        return res.status(406).send("No of attempts exceeded. Try registering again")
     }
     catch(e)
     {
@@ -111,7 +111,7 @@ router.post('/student/login',async(req,res)=>{
         return res.status(200).send({token});
     }catch(e)
     {
-        return res.status(404).send(e);
+        return res.status(401).send(e);
     }
 
 })
@@ -144,6 +144,7 @@ router.post('/login',async(req,res)=>{
 
         //Send Email
         const otp=await sendEmail(email)
+        console.log(otp)
         const otpObject={
             value:otp,
             createdAt:new Date(),
