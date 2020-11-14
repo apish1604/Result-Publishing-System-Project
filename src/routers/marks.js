@@ -55,8 +55,8 @@ router.put('/addmarks',adminAuth,upload.single('file'),async(req,res)=>{
     
     const private_key = new NodeRSA(privateKey1)
 
-    if(sem>10)
-        return res.send("Enter valid semester number")
+    if(isNaN(sem) || sem>10 || sem<=0)
+        return res.send("Enter a valid semester number")
 
    csv()
    .fromFile(req.file.path)
@@ -111,14 +111,12 @@ router.get('/result',studentAuth,async(req,res)=>{
 
     const rollno = req.query.rollno
     const sem = req.query.semester
-
     try{
+        if(isNaN(sem) || sem<=0 || sem>10)
+            throw new Error("Enter a valid semester")
         const student=await Student.findOne({rollno})
         if(!student)
             return res.status(404).send("Student not registered")
-        
-        if(sem>10)
-            return res.send("Enter valid semester number")
         if(student.result.length < sem)
             return res.status(404).send("Result is not out yet")
 

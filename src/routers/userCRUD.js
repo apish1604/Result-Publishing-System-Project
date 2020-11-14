@@ -12,8 +12,11 @@ router.post('/register',async(req,res)=>{
     const rollno=req.body.rollno;
     const password=req.body.password;
     const recent=new Date()
- 
     try{
+        if((typeof rollno === 'undefined') || (typeof password === 'undefined'))
+        {
+            throw ("Provide required field")
+        }
         const student = await Student.findOne({rollno:rollno})
         const unverifiedStudent = await StudentVerify.findOne({rollno:rollno})
 
@@ -36,7 +39,6 @@ router.post('/register',async(req,res)=>{
         
         //Send email
         const otp=await sendEmail(email)
-        console.log(otp)
         const newStudent = await new StudentVerify({rollno,otp,password});
         await newStudent.save()
     
@@ -45,7 +47,7 @@ router.post('/register',async(req,res)=>{
         return res.status(201).send({token});
     }catch(e)
     {
-        return res.send(e)
+        return res.status(501).send(e)
     }
    
 })
@@ -90,7 +92,7 @@ router.post('/verify',auth,async(req,res)=>{
     }
     catch(e)
     {
-        return res.send("Error")
+        return res.status(500).send(e)
     }
 })
 
@@ -195,7 +197,7 @@ router.put('/verifyadmin',async(req,res)=>{
     }
     catch(e)
     {
-        return res.send("Error")
+        return res.status(500).send(e)
     }
 })
 
