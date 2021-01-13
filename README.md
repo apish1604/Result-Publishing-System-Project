@@ -19,7 +19,15 @@ Developed a secured online platform which will allow the teachers to upload the 
   - View Result
 * Admin
   - Upload Result via CSV File
-  
+## System Architecture
+#### Student Registration
+<img src="/images/Student%20Registration.png" alt="Student Registration" width="700"/>
+
+#### Upload Grades
+<img src="/images/Uploading%20Grades.png" alt="Uploading Grades" width="700"/>
+
+#### View Grades
+<img src="/images/Viewing%20Grades.png" alt="View Grades" width="700"/>
     
 ## Technologies Used
 * Node.js
@@ -28,5 +36,7 @@ Developed a secured online platform which will allow the teachers to upload the 
 * Node.js RSA library
 
 ## Setup
-Run ``` npm install ``` to install all the packages and dependencies.
+* Clone the repository to your local machine using git clone using ``` https://github.com/apish1604/Result-Publishing-System-Project ``` 
+* Run ``` npm install ``` to install all the packages and dependencies.
+* Run ``` npm start ``` 
 
